@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Search | StockSuggest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .search-bg {
+            background-color: #000000;
+        }
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: white;
+            border-bottom: 1px solid #d4d4d4;
+        }
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation (same as index.html) -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="index.html" class="flex items-center py-4 px-2">
+                            <span class="font-semibold text-gray-900 text-lg">Ahire Capital</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Home</a>
+                    <a href="search.html" class="py-4 px-2 text-blue-600 border-b-4 border-blue-600 font-semibold">Search</a>
+                    <a href="portfolio.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Portfolio</a>
+                    <a href="news.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">News</a>
+                    <a href="about.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">About</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Section -->
+    <section class="search-bg h-64 flex items-center justify-center">
+        <div class="w-full max-w-2xl px-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Stock Search</h1>
+            <div class="relative">
+                <form id="stockSearchForm" class="flex">
+                    <input type="text" id="stockInput" class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none" placeholder="Search for stocks (e.g. AAPL, MSFT)" autocomplete="off">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-r-lg transition duration-300">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                <div id="autocomplete-list" class="autocomplete-items"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="py-12 px-4 max-w-6xl mx-auto">
+        <div id="loadingIndicator" class="hidden text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
+            <p class="text-gray-600">Fetching stock data...</p>
+        </div>
+
+        <div id="errorMessage" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+            <p id="errorText"></p>
+        </div>
+
+        <div id="stockResults" class="hidden bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Stock Header -->
+            <div class="bg-gray-50 px-6 py-4 border-b">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 id="stockSymbol" class="text-2xl font-bold"></h2>
+                        <p id="companyName" class="text-gray-600"></p>
+                    </div>
+                    <div class="text-right">
+                        <p id="stockPrice" class="text-3xl font-bold"></p>
+                        <p id="priceChange" class="text-sm"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                <!-- Left Column -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Key Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Open</span>
+                            <span id="openPrice" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">High</span>
+                            <span id="highPrice" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Low</span>
+                            <span id="lowPrice" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Previous Close</span>
+                            <span id="prevClose" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Volume</span>
+                            <span id="volume" class="font-medium"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Performance Chart</h3>
+                    <div class="chart-container">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="bg-gray-50 px-6 py-4 border-t">
+                <button id="addToPortfolioBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                    <i class="fas fa-plus mr-2"></i>Add to Portfolio
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Ahire Capital</h3>
+                    <p class="text-gray-400">Providing premium stock recommendations since 2025.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-white transition duration-300">Stock Search</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-white transition duration-300">Portfolio</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="news.html" class="text-gray-400 hover:text-white transition duration-300">Market News</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-github text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 StockSuggest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Stock Search -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Sample stock symbols for autocomplete
+        const stockSymbols = [
+            "AAPL - Apple Inc.",
+            "MSFT - Microsoft Corporation",
+            "GOOGL - Alphabet Inc.",
+            "AMZN - Amazon.com Inc.",
+            "META - Meta Platforms Inc.",
+            "TSLA - Tesla Inc.",
+            "NVDA - NVIDIA Corporation",
+            "JPM - JPMorgan Chase & Co.",
+            "V - Visa Inc.",
+            "WMT - Walmart Inc."
+        ];
+
+        // DOM Elements
+        const stockInput = document.getElementById('stockInput');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const stockSearchForm = document.getElementById('stockSearchForm');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const stockResults = document.getElementById('stockResults');
+        const addToPortfolioBtn = document.getElementById('addToPortfolioBtn');
+
+        // Chart variables
+        let stockChart;
+
+        // Autocomplete functionality
+        stockInput.addEventListener('input', function() {
+            const inputVal = this.value.toUpperCase();
+            autocompleteList.innerHTML = '';
+            
+            if (!inputVal) return;
+            
+            const matches = stockSymbols.filter(symbol => 
+                symbol.toUpperCase().includes(inputVal)
+            );
+            
+            matches.forEach(match => {
+                const item = document.createElement('div');
+                item.innerHTML = `<strong>${match.substr(0, inputVal.length)}</strong>${match.substr(inputVal.length)}`;
+                item.addEventListener('click', function() {
+                    stockInput.value = match.split(' - ')[0];
+                    autocompleteList.innerHTML = '';
+                });
+                autocompleteList.appendChild(item);
+            });
+        });
+
+        // Form submission
+        stockSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const symbol = stockInput.value.trim();
+            
+            if (!symbol) {
+                showError('Please enter a stock symbol');
+                return;
+            }
+            
+            fetchStockData(symbol);
+        });
+
+        // Fetch stock data from Alpha Vantage API (demo version)
+        function fetchStockData(symbol) {
+            // Show loading indicator
+            loadingIndicator.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            stockResults.classList.add('hidden');
+            
+            // In a real implementation, you would use the actual Alpha Vantage API
+            // For demo purposes, we'll use mock data with a delay
+            setTimeout(() => {
+                loadingIndicator.classList.add('hidden');
+                
+                // Mock data - replace with actual API call in production
+                const mockData = {
+                    'AAPL': {
+                        symbol: 'AAPL',
+                        name: 'Apple Inc.',
+                        price: '175.34',
+                        change: '2.10',
+                        changePercent: '1.21',
+                        open: '173.50',
+                        high: '176.20',
+                        low: '172.80',
+                        previousClose: '173.24',
+                        volume: '45,678,901'
+                    },
+                    'MSFT': {
+                        symbol: 'MSFT',
+                        name: 'Microsoft Corporation',
+                        price: '328.39',
+                        change: '2.65',
+                        changePercent: '0.81',
+                        open: '326.50',
+                        high: '329.75',
+                        low: '325.20',
+                        previousClose: '325.74',
+                        volume: '23,456,789'
+                    },
+                    'TSLA': {
+                        symbol: 'TSLA',
+                        name: 'Tesla Inc.',
+                        price: '260.54',
+                        change: '-1.30',
+                        changePercent: '-0.50',
+                        open: '262.00',
+                        high: '263.45',
+                        low: '258.60',
+                        previousClose: '261.84',
+                        volume: '34,567,890'
+                    }
+                };
+                
+                if (mockData[symbol]) {
+                    displayStockData(mockData[symbol]);
+                } else {
+                    showError('Stock symbol not found. Please try another symbol.');
+                }
+            }, 1500);
+        }
+
+        // Display stock data
+        function displayStockData(data) {
+            // Update DOM elements
+            document.getElementById('stockSymbol').textContent = data.symbol;
+            document.getElementById('companyName').textContent = data.name;
+            document.getElementById('stockPrice').textContent = `$${data.price}`;
+            
+            const changeElement = document.getElementById('priceChange');
+            if (parseFloat(data.change) >= 0) {
+                changeElement.textContent = `+${data.change} (${data.changePercent}%)`;
+                changeElement.className = 'text-sm text-green-500';
+            } else {
+                changeElement.textContent = `${data.change} (${data.changePercent}%)`;
+                changeElement.className = 'text-sm text-red-500';
+            }
+            
+            document.getElementById('openPrice').textContent = `$${data.open}`;
+            document.getElementById('highPrice').textContent = `$${data.high}`;
+            document.getElementById('lowPrice').textContent = `$${data.low}`;
+            document.getElementById('prevClose').textContent = `$${data.previousClose}`;
+            document.getElementById('volume').textContent = data.volume;
+            
+            // Update chart
+            updateChart(data.symbol);
+            
+            // Update add to portfolio button
+            addToPortfolioBtn.onclick = function() {
+                addToPortfolio(data);
+            };
+            
+            // Show results
+            stockResults.classList.remove('hidden');
+        }
+
+        // Show error message
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        // Update stock chart
+        function updateChart(symbol) {
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (stockChart) {
+                stockChart.destroy();
+            }
+            
+            // Mock data for chart - replace with actual API data in production
+            const labels = ['9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', 
+                          '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM'];
+            
+            let dataPoints;
+            if (symbol === 'AAPL') {
+                dataPoints = [173.50, 173.80, 174.20, 174.50, 174.20, 174.80, 175.10, 175.30, 175.60, 175.40, 175.20, 175.30, 175.40, 175.34];
+            } else if (symbol === 'MSFT') {
+                dataPoints = [326.50, 326.80, 327.20, 327.50, 327.80, 328.10, 328.30, 328.50, 328.30, 328.40, 328.20, 328.30, 328.35, 328.39];
+            } else {
+                dataPoints = [262.00, 261.50, 261.20, 260.80, 260.50, 260.20, 260.00, 260.30, 260.50, 260.40, 260.50, 260.60, 260.55, 260.54];
+            }
+            
+            stockChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Price',
+                        data: dataPoints,
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Add stock to portfolio (to be implemented with portfolio.html)
+        function addToPortfolio(stock) {
+            // In a real implementation, this would save to localStorage
+            alert(`${stock.symbol} added to your portfolio!`);
+        }
+    </script>
+</body>
+</html>

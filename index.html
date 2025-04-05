@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Suggest | Market Insights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <span class="font-semibold text-gray-900 text-lg">Ahire Capital</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-blue-600 border-b-4 border-blue-600 font-semibold">Home</a>
+                    <a href="search.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Search</a>
+                    <a href="portfolio.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Portfolio</a>
+                    <a href="news.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">News</a>
+                    <a href="about.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">About</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg h-96 flex items-center justify-center">
+        <div class="text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Smart Stock Suggestions</h1>
+            <p class="text-xl text-white mb-8">Get real-time market data and expert analysis</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="search.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">Search Stocks</a>
+                <a href="portfolio.html" class="bg-white hover:bg-gray-100 text-blue-600 font-bold py-3 px-6 rounded-lg transition duration-300">View Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hot Stocks Table -->
+    <section class="py-12 px-4 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-8">Hot Stocks to Buy Now</h2>
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-12">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Market Cap</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Our Rating</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-microchip text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">NVDA</div>
+                                        <div class="text-sm text-gray-500">NVIDIA Corp</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">$985.42</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">+4.2%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">$2.4T</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Strong Buy</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="search.html?symbol=NVDA" class="text-blue-600 hover:text-blue-800">Analyze</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-robot text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">AIEX</div>
+                                        <div class="text-sm text-gray-500">AI Experts Inc</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">$187.65</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">+8.7%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">$85B</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Strong Buy</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="search.html?symbol=AIEX" class="text-blue-600 hover:text-blue-800">Analyze</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-atom text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">QUBT</div>
+                                        <div class="text-sm text-gray-500">Quantum Tech</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">$245.30</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">+12.3%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">$62B</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Buy</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="search.html?symbol=QUBT" class="text-blue-600 hover:text-blue-800">Analyze</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-solar-panel text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">SOLR</div>
+                                        <div class="text-sm text-gray-500">Solaris Energy</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">$78.90</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">+3.5%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">$28B</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">Accumulate</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="search.html?symbol=SOLR" class="text-blue-600 hover:text-blue-800">Analyze</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-rocket text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">SPCX</div>
+                                        <div class="text-sm text-gray-500">SpaceX Public</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">$320.15</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">+6.8%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">$150B</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Buy</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="search.html?symbol=SPCX" class="text-blue-600 hover:text-blue-800">Analyze</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2 class="text-3xl font-bold text-center mb-8">Featured Analysis</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Stock Card 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">AAPL</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Apple Inc.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold">$175.34</span>
+                        <span class="text-green-500 font-medium">+1.2%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stock Card 2 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">MSFT</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Microsoft Corp.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold">$328.39</span>
+                        <span class="text-green-500 font-medium">+0.8%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stock Card 3 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">TSLA</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Tesla Inc.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold">$260.54</span>
+                        <span class="text-red-500 font-medium">-0.5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Ahire Capital</h3>
+                    <p class="text-gray-400">Providing premium stock recommendations since 2025.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-white transition duration-300">Stock Search</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-white transition duration-300">Portfolio</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="news.html" class="text-gray-400 hover:text-white transition duration-300">Market News</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-github text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 StockSuggest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const btn = document.querySelector('.mobile-menu-button');
+        const menu = document.querySelector('.mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market News | StockSuggest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .news-bg {
+            background-color: #000000;
+        }
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .empty-state {
+            min-height: 300px;
+        }
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation (same as index.html) -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="index.html" class="flex items-center py-4 px-2">
+                            <span class="font-semibold text-gray-900 text-lg">StockSuggest</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Home</a>
+                    <a href="search.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Search</a>
+                    <a href="portfolio.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">Portfolio</a>
+                    <a href="news.html" class="py-4 px-2 text-blue-600 border-b-4 border-blue-600 font-semibold">News</a>
+                    <a href="about.html" class="py-4 px-2 text-gray-500 hover:text-blue-600 transition duration-300">About</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="news-bg h-64 flex items-center justify-center">
+        <div class="text-center px-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Market News</h1>
+            <p class="text-xl text-white">Stay updated with the latest financial news</p>
+        </div>
+    </section>
+
+    <!-- News Content -->
+    <section class="py-12 px-4 max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold mb-4 md:mb-0">Latest Financial News</h2>
+            <div class="relative w-full md:w-64">
+                <input type="text" id="newsSearch" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search news...">
+                <button id="searchButton" class="absolute right-2 top-2 text-gray-500 hover:text-blue-600">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="text-center py-8">
+            <div class="inline-block loading-spinner rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mb-4"></div>
+            <p class="text-gray-600">Loading market news...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+            <p id="errorText"></p>
+        </div>
+
+        <!-- News Articles -->
+        <div id="newsArticles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Articles will be inserted here by JavaScript -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-8">
+            <button id="loadMoreBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 hidden">
+                Load More News
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">StockSuggest</h3>
+                    <p class="text-gray-400">Providing smart stock suggestions and market insights since 2023.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-white transition duration-300">Stock Search</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-white transition duration-300">Portfolio</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="news.html" class="text-gray-400 hover:text-white transition duration-300">Market News</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-github text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 StockSuggest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for News -->
+    <script>
+        // DOM Elements
+        const newsArticles = document.getElementById('newsArticles');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const newsSearch = document.getElementById('newsSearch');
+        const searchButton = document.getElementById('searchButton');
+
+        // News API variables
+        let currentPage = 1;
+        let currentQuery = 'stock market';
+        let isLoading = false;
+
+        // Fetch news from NewsAPI (demo version)
+        function fetchNews(page = 1, query = 'stock market') {
+            if (isLoading) return;
+            isLoading = true;
+            
+            // Show loading indicator
+            loadingIndicator.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            
+            // In a real implementation, you would use the actual NewsAPI
+            // For demo purposes, we'll use mock data with a delay
+            setTimeout(() => {
+                loadingIndicator.classList.add('hidden');
+                
+                // Mock data - replace with actual API call in production
+                const mockNews = [
+                    {
+                        title: 'AI Stocks Lead 2025 Market Rally as Tech Adoption Soars',
+                        description: 'Artificial intelligence companies dominate Q1 2025 performance with average 45% gains as enterprise adoption accelerates.',
+                        url: '#',
+                        urlToImage: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg',
+                        publishedAt: '2025-04-01T08:15:00Z',
+                        source: { name: 'Tech Financial Times' }
+                    },
+                    {
+                        title: 'Quantum Computing Stocks Surge After Breakthrough',
+                        description: 'Quantum computing firms jump 30% on average after major error correction breakthrough announced in March 2025.',
+                        url: '#',
+                        urlToImage: 'https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg',
+                        publishedAt: '2025-03-15T14:20:00Z',
+                        source: { name: 'Quantum Finance Daily' }
+                    },
+                    {
+                        title: 'Space Economy Stocks Reach New Highs',
+                        description: 'Commercial space companies hit record valuations as 2025 launch cadence triples previous years.',
+                        url: '#',
+                        urlToImage: 'https://images.pexels.com/photos/586030/pexels-photo-586030.jpeg',
+                        publishedAt: '2025-02-28T11:05:00Z',
+                        source: { name: 'Orbital Market Watch' }
+                    },
+                    {
+                        title: 'Banking Sector Under Pressure as Interest Margins Shrink',
+                        description: 'Shares of major banks declined as net interest margins continue to shrink, raising concerns about profitability in the sector.',
+                        url: '#',
+                        urlToImage: 'https://images.pexels.com/photos/4386421/pexels-photo-4386421.jpeg',
+                        publishedAt: '2023-06-12T14:20:00Z',
+                        source: { name: 'Reuters' }
+                    },
+                    {
+                        title: 'Retail Investors Drive Surge in Meme Stocks Again',
+                        description: 'A new wave of retail investor enthusiasm has driven several meme stocks to double-digit percentage gains this week.',
+                        url: '#',
+                        urlToImage: 'https://images.pexels.com/photos/6772078/pexels-photo-6772078.jpeg',
+                        publishedAt: '2023-06-11T11:10:00Z',
+                        source: { name: 'CNBC' }
+                    },
+                    {
+                        title: 'Cryptocurrency Markets Stabilize After Recent Volatility',
+                        description: 'Major cryptocurrencies showed signs of stabilization after weeks of extreme volatility, with Bitcoin holding above $25,000.',
+                        url: '#',
+                        urlToImage: 'https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg',
+                        publishedAt: '2023-06-10T08:05:00Z',
+                        source: { name: 'CoinDesk' }
+                    }
+                ];
+                
+                // Filter by search query if provided
+                const filteredNews = query ? 
+                    mockNews.filter(article => 
+                        article.title.toLowerCase().includes(query.toLowerCase()) || 
+                        article.description.toLowerCase().includes(query.toLowerCase())
+                    ) : mockNews;
+                
+                if (filteredNews.length === 0) {
+                    showError('No news articles found matching your search');
+                    return;
+                }
+                
+                // Display news articles
+                displayNews(filteredNews);
+                
+                // Show load more button if we have more pages (mock)
+                if (page < 3) {
+                    loadMoreBtn.classList.remove('hidden');
+                } else {
+                    loadMoreBtn.classList.add('hidden');
+                }
+                
+                isLoading = false;
+            }, 1500);
+        }
+
+        // Display news articles
+        function displayNews(articles) {
+            // Clear existing articles if it's a new search
+            if (currentPage === 1) {
+                newsArticles.innerHTML = '';
+            }
+            
+            articles.forEach(article => {
+                const articleCard = createNewsCard(article);
+                newsArticles.appendChild(articleCard);
+            });
+        }
+
+        // Create news card element
+        function createNewsCard(article) {
+            const card = document.createElement('div');
+            card.className = 'news-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300';
+            
+            const publishedDate = new Date(article.publishedAt);
+            const formattedDate = publishedDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            card.innerHTML = `
+                <div class="h-48 overflow-hidden">
+                    <img src="${article.urlToImage}" alt="${article.title}" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-sm text-gray-500">${article.source.name}</span>
+                        <span class="text-sm text-gray-500">${formattedDate}</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">${article.title}</h3>
+                    <p class="text-gray-600 mb-4">${article.description}</p>
+                    <a href="${article.url}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">
+                        Read more <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Show error message
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        // Search news
+        function searchNews() {
+            const query = newsSearch.value.trim();
+            currentQuery = query || 'stock market';
+            currentPage = 1;
+            fetchNews(currentPage, currentQuery);
+        }
+
+        // Event listeners
+        searchButton.addEventListener('click', searchNews);
+        newsSearch.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchNews();
+            }
+        });
+        loadMoreBtn.addEventListener('click', function() {
+            currentPage++;
+            fetchNews(currentPage, currentQuery);
+        });
+
+        // Initialize news on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchNews(currentPage, currentQuery);
+        });
+    </script>
+</body>
+</html>
